@@ -1,0 +1,1 @@
+This is used to practice terraform to create aws resources
