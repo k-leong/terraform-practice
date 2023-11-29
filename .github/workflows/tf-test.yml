@@ -2,7 +2,8 @@ name: Terraform Validation and Plan
 
 on:
   push:
-    branches: [main, master]
+    paths:
+      - '**'
   pull_request:
     branches: [main, master]
 
@@ -17,10 +18,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: terraform setup
+      - name: Get modified paths
+        id: get_paths
+        run: echo "::set-output name=paths::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+
+      - name: Change into Subdirectory
+        run: |
+          changed_paths=${{ steps.get_paths.outputs.paths }}
+          subdirectory=$(dirname "$changed_paths")
+          cd "$subdirectory" || exit 1
+          
+          echo "Changed into subdirectory: $subdirectory"
+
+      - name: Terraform setup
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.4
