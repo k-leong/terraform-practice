@@ -10,7 +10,7 @@ terraform {
 }
 
 variable "instance_count" {
-  default = 5
+  default = 100
 }
 
 provider "aws" {

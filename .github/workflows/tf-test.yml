@@ -20,14 +20,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Get modified paths
         id: get_paths
-        run: echo "::set-output name=paths::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+        run: |
+          echo "SUBDIRECTORY=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})" >> "$GITHUB_OUTPUT"
 
       - name: Change into Subdirectory
+        env:
+          SUBDIRECTORY: ${{steps.get_paths.outputs.SUBDIRECTORY}}
         run: |
-          changed_paths=${{ steps.get_paths.outputs.paths }}
+          changed_paths=$SUBDIRECTORY
           subdirectory=$(dirname "$changed_paths")
           cd "$subdirectory" || exit 1
           
