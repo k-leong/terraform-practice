@@ -43,6 +43,9 @@ jobs:
         with:
           terraform_version: 1.6.4
 
+      - name: Print working directory
+        run: pwd
+
       - name: Assume AWS IAM Role
         uses: aws-actions/configure-aws-credentials@v4.0.1
         with: 
