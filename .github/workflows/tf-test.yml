@@ -20,31 +20,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Get modified paths
-        id: get_paths
-        run: |
-          echo "SUBDIRECTORY=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})" >> "$GITHUB_OUTPUT"
-
-      - name: Change into Subdirectory
-        env:
-          SUBDIRECTORY: ${{steps.get_paths.outputs.SUBDIRECTORY}}
-        run: |
-          changed_paths=$SUBDIRECTORY
-          subdirectory=$(dirname "$changed_paths")
-          cd "$subdirectory" || exit 1
-          
-          echo "Changed into subdirectory: $subdirectory"
 
       - name: Terraform setup
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.4
-
-      - name: Print working directory
-        run: pwd
 
       - name: Assume AWS IAM Role
         uses: aws-actions/configure-aws-credentials@v4.0.1
@@ -61,12 +41,10 @@ jobs:
           aws sts get-caller-identity
 
       - name: Terraform Init
-        run: |
-          pwd
-          terraform init
+        id: init
+        run: terraform init
 
       - name: Terraform Plan
-        run: |
-          pwd
-          terraform plan
-        continue-on-error: false
+        id: plan
+        run: terraform plan
+        # continue-on-error: false
