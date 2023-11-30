@@ -10,7 +10,7 @@ terraform {
 }
 
 variable "instance_count" {
-  default = 200
+  default = 5000
 }
 
 provider "aws" {
@@ -25,7 +25,7 @@ resource "aws_instance" "server" {
   count = var.instance_count
 
   ami           = "ami-080d1454ad4fabd12"
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
 
   availability_zone = element(random_shuffle.az.result, count.index)
 
