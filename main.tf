@@ -13,7 +13,13 @@ provider "aws" {
   region = "us-west-1"
 }
 
-module "ec2_module" {
-  source = "./ec2"
+module "vpc" {
+  source = "./aws-resources/vpc"
 }
 
+module "rds" {
+  source = "./aws-resources/rds"
+
+  db_private_subnet1 = module.vpc.private1_subnet
+  db_private_subnet2 = module.vpc.private2_subnet
+}
