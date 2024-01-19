@@ -12,7 +12,7 @@ resource "aws_db_instance" "test" {
 }
 
 resource "aws_db_subnet_group" "test-db-subnet" {
-  name = "tf test"
+  name       = "tf test"
   subnet_ids = [var.db_private_subnet1, var.db_private_subnet2]
 
   tags = {

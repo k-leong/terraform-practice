@@ -1,0 +1,24 @@
+# resource "random_shuffle" "az" {
+#   input = ["us-west-1b", "us-west-1c"]
+# }
+
+resource "aws_instance" "server" {
+  count         = var.instance_count
+  ami           = "ami-080d1454ad4fabd12"
+  instance_type = "t2.micro"
+  subnet_id     = element(var.subnet, count.index)
+  user_data     = <<EOF
+    #!/bin/bash
+    # Use this for your user data (script from top to bottom)
+    # install httpd (Linux 2 version)
+    yum update -y
+    yum install -y httpd
+    systemctl start httpd
+    systemctl enable httpd
+    echo "<h1>Hello World from $(hostname -f)</h1>" > /var/www/html/index.html
+  EOF
+
+  tags = {
+    Name = "server${count.index + 1}"
+  }
+}

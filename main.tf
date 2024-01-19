@@ -14,12 +14,22 @@ provider "aws" {
 }
 
 module "vpc" {
-  source = "./aws-resources/vpc"
+  source = "./ec2-rds-web-architecture/vpc"
 }
 
-module "rds" {
-  source = "./aws-resources/rds"
-
-  db_private_subnet1 = module.vpc.private1_subnet
-  db_private_subnet2 = module.vpc.private2_subnet
+resource "random_shuffle" "subnet" {
+  input = module.vpc.public_subnets
 }
+
+module "ec2" {
+  source = "./ec2-rds-web-architecture/ec2"
+
+  subnet = random_shuffle.subnet.result
+}
+
+# module "rds" {
+#   source = "./ec2-rds-web-architecture/rds"
+
+#   db_private_subnet1 = module.vpc.private1_subnet
+#   db_private_subnet2 = module.vpc.private2_subnet
+# }
