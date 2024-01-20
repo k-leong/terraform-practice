@@ -17,6 +17,12 @@ module "vpc" {
   source = "./ec2-rds-web-architecture/vpc"
 }
 
+module "sg" {
+  source = "./ec2-rds-web-architecture/sg"
+
+  vpc_id = module.vpc.vpc_id
+}
+
 resource "random_shuffle" "subnet" {
   input = module.vpc.public_subnets
 }
@@ -24,12 +30,13 @@ resource "random_shuffle" "subnet" {
 module "ec2" {
   source = "./ec2-rds-web-architecture/ec2"
 
-  subnet = random_shuffle.subnet.result
+  subnet             = random_shuffle.subnet.result
+  ec2_security_group = module.sg.ec2_rds_id
 }
 
-# module "rds" {
-#   source = "./ec2-rds-web-architecture/rds"
+module "rds" {
+  source = "./ec2-rds-web-architecture/rds"
 
-#   db_private_subnet1 = module.vpc.private1_subnet
-#   db_private_subnet2 = module.vpc.private2_subnet
-# }
+  db_private_subnets = module.vpc.private_subnets
+  db_security_group  = module.sg.rds_ec2_id
+}

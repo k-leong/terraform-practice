@@ -1,13 +1,10 @@
-# resource "random_shuffle" "az" {
-#   input = ["us-west-1b", "us-west-1c"]
-# }
-
 resource "aws_instance" "server" {
-  count         = var.instance_count
-  ami           = "ami-080d1454ad4fabd12"
-  instance_type = "t2.micro"
-  subnet_id     = element(var.subnet, count.index)
-  user_data     = <<EOF
+  count           = var.instance_count
+  ami             = "ami-080d1454ad4fabd12"
+  instance_type   = "t2.micro"
+  subnet_id       = element(var.subnet, count.index)
+  security_groups = [var.ec2_security_group]
+  user_data       = <<EOF
     #!/bin/bash
     # Use this for your user data (script from top to bottom)
     # install httpd (Linux 2 version)

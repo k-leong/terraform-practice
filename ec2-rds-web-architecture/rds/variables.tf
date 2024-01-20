@@ -1,7 +1,7 @@
-variable "db_private_subnet1" {
-  type = string
+variable "db_private_subnets" {
+  type = list(string)
 }
 
-variable "db_private_subnet2" {
+variable "db_security_group" {
   type = string
 }
