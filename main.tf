@@ -19,6 +19,7 @@ module "ec2" {
 
 module "ebs" {
   source = "./ec2-ebs/ebs"
+  instance = module.ec2.ec2_instance
 }
 
 module "vpc" {

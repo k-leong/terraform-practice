@@ -1,7 +1,3 @@
-variable "instance_count" {
-  default = 5
-}
-
 resource "random_shuffle" "az" {
   input = ["us-west-1b", "us-west-1c"]
 }
