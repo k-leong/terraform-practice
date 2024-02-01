@@ -18,8 +18,9 @@ module "ec2" {
 }
 
 module "ebs" {
-  source = "./ec2-ebs/ebs"
-  instance = module.ec2.ec2_instance
+  source   = "./ec2-ebs/ebs"
+  instance = module.ec2.ec2_instance_id
+  az       = module.ec2.ec2_instance_az
 }
 
 module "vpc" {

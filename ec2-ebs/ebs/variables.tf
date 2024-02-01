@@ -1,3 +1,7 @@
 variable "instance" {
-  type = string
+  type = list(string)
+}
+
+variable "az" {
+  type = list(string)
 }
