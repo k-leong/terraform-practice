@@ -1,20 +1,27 @@
-variable "instance_count" {
-  default = 5000
-}
-
-resource "random_shuffle" "az" {
-  input = ["us-west-1b", "us-west-1c"]
-}
-
-resource "aws_instance" "server" {
-  count = var.instance_count
-
-  ami           = "ami-080d1454ad4fabd12"
-  instance_type = "t3.micro"
-
-  availability_zone = element(random_shuffle.az.result, count.index)
+resource "aws_vpc" "terraform_test" {
+  cidr_block = "172.30.0.0/16"
 
   tags = {
-    Name = "server${count.index + 1}"
+    Name = "terraform test"
+  }
+}
+
+resource "aws_subnet" "public1" {
+  vpc_id            = aws_vpc.terraform_test.id
+  cidr_block        = "172.30.0.0/24"
+  availability_zone = "us-west-1b"
+
+  tags = {
+    Name = "public subnet 1"
+  }
+}
+
+resource "aws_subnet" "public2" {
+  vpc_id            = aws_vpc.terraform_test.id
+  cidr_block        = "172.60.0.0/24"
+  availability_zone = "us-west-1c"
+
+  tags = {
+    Name = "public subnet 2"
   }
 }

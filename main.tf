@@ -13,7 +13,6 @@ provider "aws" {
   region = "us-west-1"
 }
 
-module "ec2_module" {
-  source = "./ec2"
+module "vpc" {
+  source = "./vpc"
 }
-
