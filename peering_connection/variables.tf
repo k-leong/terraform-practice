@@ -1,6 +1,6 @@
 variable "peer_vpc_id" {
   type = string
 }
-variable "vpc_id" {
+variable "main_vpc_id" {
   type = string
 }

@@ -5,3 +5,7 @@ output "peer_subnet_id" {
 output "vpc_id" {
   value = aws_vpc.test_peer.id
 }
+
+output "vpc_cidr" {
+  value = aws_vpc.test_peer.cidr_block
+}

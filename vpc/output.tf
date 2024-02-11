@@ -5,3 +5,7 @@ output "subnet_id" {
 output "vpc_id" {
   value = aws_vpc.terraform_test.id
 }
+
+output "vpc_cidr" {
+  value = aws_vpc.terraform_test.cidr_block
+}
