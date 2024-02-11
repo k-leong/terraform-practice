@@ -16,3 +16,14 @@ provider "aws" {
 module "vpc" {
   source = "./vpc"
 }
+
+module "peer" {
+  source = "./peer_vpc"
+}
+
+module "peering_connection" {
+  source = "./peering_connection"
+
+  vpc_id      = module.vpc.vpc_id
+  peer_vpc_id = module.peer.vpc_id
+}
