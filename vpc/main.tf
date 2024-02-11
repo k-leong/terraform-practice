@@ -18,7 +18,7 @@ resource "aws_subnet" "public1" {
 
 resource "aws_subnet" "public2" {
   vpc_id            = aws_vpc.terraform_test.id
-  cidr_block        = "172.60.0.0/24"
+  cidr_block        = "172.30.10.0/24"
   availability_zone = "us-west-1c"
 
   tags = {
