@@ -36,6 +36,15 @@ module "rt" {
   peering_cx_id = module.peering_connection.pcx_id
   peer_cidr     = module.peer.vpc_cidr
   main_cidr     = module.vpc.vpc_cidr
-  peer_subnet   = module.peer.peer_subnet_id[0]
-  main_subnet   = module.vpc.subnet_id[0]
+  peer_subnet   = module.peer.peer_subnet_id
+  main_subnet   = module.vpc.subnet_id
+}
+
+module "ec2" {
+  source = "./ec2"
+
+  peer_subnet_id = module.peer.peer_subnet_id
+  peer_sg_id     = module.peer.peer_sg_id
+  subnet_id      = module.vpc.subnet_id
+  sg_id          = module.vpc.sg_id
 }
