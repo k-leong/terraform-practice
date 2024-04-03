@@ -1,7 +1,7 @@
 name: Terraform Apply
 
 on:
-  push:
+  pull_request:
     branches: [main, master]
 
 env:
@@ -44,7 +44,12 @@ jobs:
       - name: Generate tfstate file
         id: generate_filename
         run: |
-          echo "terraform.tfstate ${GITHUB_REF##*/}-$(date +%Y%m%d%H%M%S)" > ${GITHUB_REF##*/}.txt
+          export filename="terraform-state-${GITHUB_REF##*/}-$(date +%Y%m%d%H%M%S)"
+          echo ${filename}
+          touch ${filename}.txt
+        # echo "# terraform.tfstate ${GITHUB_REF##*/}-$(date +%Y%m%d%H%M%S)" > ${GITHUB_REF##*/}.txt
+        env:
+          FILENAME: ${{ steps.generate_filename.outputs.filename }}
       
       - name: Terraform Init
         id: init
@@ -66,8 +71,8 @@ jobs:
         id: store_state_in_s3
         if: steps.apply.outcome == 'success'
         run: |
-          cp terraform.tfstate ${GITHUB_REF##*/}.txt
-          aws s3 cp ${GITHUB_REF##*/}.txt ${{ secrets.S3_URI }}${GITHUB_REF##*/}.txt
+          cat terraform.tfstate | base64 -w 0 > ${env.FILENAME}.txt
+          aws s3 cp ${env.FILENAME}.txt ${{ secrets.S3_URI }}${env.FILENAME}.txt
 
       # - name: Terraform Clean up
       #   if: steps.store_state_in_s3.outcome == 'success'
