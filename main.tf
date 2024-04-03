@@ -14,15 +14,16 @@ provider "aws" {
 }
 
 module "ec2" {
-  source = "./ec2-ebs/ec2"
-}
-
-module "ebs" {
-  source   = "./ec2-ebs/ebs"
-  instance = module.ec2.ec2_instance_id
-  az       = module.ec2.ec2_instance_az
+  source = "./ec2"
 }
 
 module "vpc" {
-  source = "./ec2-ebs/vpc"
+  source = "./vpc"
+}
+
+module "ebs" {
+  source = "./ebs"
+
+  instance = module.ec2.ec2_instance_id
+  az = module.ec2.ec2_instance_az
 }
