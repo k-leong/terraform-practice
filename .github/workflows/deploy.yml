@@ -74,8 +74,6 @@ jobs:
       - name: Terraform Clean up
         if: steps.store_state_in_s3.outcome == 'success'
         run: |
-          rm -rf .terraform
-          rm -rf terraform.tfstate*
           rm -rf ${{steps.generate_filename.outputs.out}}
           terraform destroy --auto-approve
           echo "terraform clean up"
