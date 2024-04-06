@@ -45,12 +45,9 @@ jobs:
         id: generate_filename
         run: |
           export filename="terraform-state-${GITHUB_REF##*/}-$(date +%Y%m%d%H%M%S)"
-          echo ${filename}
-          touch ${filename}.txt
-        # echo "# terraform.tfstate ${GITHUB_REF##*/}-$(date +%Y%m%d%H%M%S)" > ${GITHUB_REF##*/}.txt
-        env:
-          FILENAME: ${{ steps.generate_filename.outputs.filename }}
-      
+          echo "filename ${filename}"
+          echo "::set-output name=out::${filename}.txt"
+
       - name: Terraform Init
         id: init
         run: terraform init
@@ -71,14 +68,15 @@ jobs:
         id: store_state_in_s3
         if: steps.apply.outcome == 'success'
         run: |
-          cat terraform.tfstate | base64 -w 0 > ${env.FILENAME}.txt
-          aws s3 cp ${env.FILENAME}.txt ${{ secrets.S3_URI }}${env.FILENAME}.txt
+          cat terraform.tfstate | base64 -w 0 > ${{steps.generate_filename.outputs.out}}
+          aws s3 cp ${{steps.generate_filename.outputs.out}} ${{ secrets.S3_URI }}${{steps.generate_filename.outputs.out}}
 
-      # - name: Terraform Clean up
-      #   if: steps.store_state_in_s3.outcome == 'success'
-      #   run: |
-      #     rm -rf .terraform
-      #     rm -rf terraform.tfstate*
-      #     rm -rf ${GITHUB_REF##*/}.txt
-      #     echo "terraform clean up"
-      #     exit 1
+      - name: Terraform Clean up
+        if: steps.store_state_in_s3.outcome == 'success'
+        run: |
+          rm -rf .terraform
+          rm -rf terraform.tfstate*
+          rm -rf ${{steps.generate_filename.outputs.out}}
+          terraform destroy --auto-approve
+          echo "terraform clean up"
+          exit 1
