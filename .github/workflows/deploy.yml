@@ -44,7 +44,7 @@ jobs:
       - name: Generate tfstate file
         id: generate_filename
         run: |
-          export filename="terraform-state-${GITHUB_REF##*/}-$(date +%Y%m%d%H%M%S)"
+          export filename="terraform-state-${GITHUB_HEAD_REF##*/}-$(date +%Y%m%d%H%M%S)"
           echo "filename ${filename}"
           echo "::set-output name=out::${filename}.txt"
 
@@ -77,4 +77,4 @@ jobs:
           rm -rf ${{steps.generate_filename.outputs.out}}
           terraform destroy --auto-approve
           echo "terraform clean up"
-          exit 1
+          exit 0
