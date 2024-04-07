@@ -33,7 +33,7 @@ module "rt" {
 
   main_vpc_id = module.vpc.vpc_id
   main_cidr   = module.vpc.vpc_cidr
-  main_subnet = module.vpc.subnet_id
+  main_subnet = module.vpc.public_subnet_ids[0]
 
   peering_cx_id = module.peering_connection.pcx_id
 
@@ -49,7 +49,7 @@ module "ec2" {
   peer_subnet_id = module.peer.peer_subnet_id
   peer_sg_id     = module.sg.peer_sg_id
 
-  subnet_id = module.vpc.subnet_id
+  subnet_id = module.vpc.public_subnet_ids[0]
   sg_id     = module.sg.sg_id
 }
 
