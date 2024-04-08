@@ -7,7 +7,7 @@ data "aws_ami" "al2023" {
   }
   filter {
     name   = "architecture"
-    values = ["arm64"]
+    values = ["x86_64"]
   }
 }
 
@@ -16,6 +16,8 @@ resource "aws_instance" "test_peer" {
   instance_type   = "t3.micro"
   security_groups = [var.peer_sg_id]
   subnet_id       = var.peer_subnet_id
+  associate_public_ip_address = true
+  key_name = "terraform"
   user_data       = <<EOF
     #!/bin/bash
     # Use this for your user data (script from top to bottom)
@@ -37,6 +39,8 @@ resource "aws_instance" "test" {
   instance_type   = "t3.micro"
   security_groups = [var.sg_id]
   subnet_id       = var.subnet_id
+  associate_public_ip_address = true
+  key_name = "terraform"
   user_data       = <<EOF
     #!/bin/bash
     # Use this for your user data (script from top to bottom)

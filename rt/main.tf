@@ -35,3 +35,21 @@ resource "aws_route_table_association" "main_rt_assoc" {
   route_table_id = aws_route_table.main_rt.id
   subnet_id      = var.main_subnet
 }
+
+resource "aws_route" "main_to_internet" {
+  route_table_id = aws_route_table.main_rt.id
+  gateway_id = aws_internet_gateway.ig.id
+  destination_cidr_block = "0.0.0.0/0"
+}
+
+resource "aws_internet_gateway" "ig" {
+  vpc_id = var.main_vpc_id
+
+  tags = {
+    Name = "terraform ig"
+  }
+}
+# resource "aws_route_table_association" "name" {
+#   route_table_id = aws_route_table.main_rt.id
+#   subnet_id = var.main_subnet
+# }
