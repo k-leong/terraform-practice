@@ -13,6 +13,6 @@ provider "aws" {
   region = "us-west-1"
 }
 
-module "name" {
-  source = "./aws_resources"
+module "vpc" {
+  source = "./vpc"
 }
