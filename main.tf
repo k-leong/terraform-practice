@@ -17,26 +17,32 @@ module "vpc" {
   source = "./vpc"
 }
 
-module "sg" {
-  source = "./sg"
+# module "sg" {
+#   source = "./sg"
 
-  vpc_id = module.vpc.vpc_id
-}
+#   vpc_id = module.vpc.vpc_id
+# }
 
-resource "random_shuffle" "subnet" {
-  input = module.vpc.public_subnet_ids
-}
+# resource "random_shuffle" "subnet" {
+#   input = module.vpc.public_subnet_ids
+# }
 
-module "ec2" {
-  source = "./ec2"
+# module "ec2" {
+#   source = "./ec2"
 
-  subnet             = random_shuffle.subnet.result
-  ec2_security_group = module.sg.ec2_rds_id
-}
+#   subnet             = random_shuffle.subnet.result
+#   ec2_security_group = module.sg.ec2_rds_id
+# }
 
-module "rds" {
-  source = "./rds"
+# module "rds" {
+#   source = "./rds"
 
-  db_private_subnets = module.vpc.private_subnet_ids
-  db_security_group  = module.sg.rds_ec2_id
+#   db_private_subnets = module.vpc.private_subnet_ids
+#   db_security_group  = module.sg.rds_ec2_id
+# }
+
+module "elb" {
+  source = "./elb"
+
+  subnets = module.vpc.public_subnet_ids
 }

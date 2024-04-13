@@ -45,3 +45,11 @@ resource "aws_subnet" "private2" {
     Name = "private subnet 2"
   }
 }
+
+resource "aws_internet_gateway" "terraform_ig" {
+  vpc_id = aws_vpc.terraform_test.id
+
+  tags = {
+    Name = "terraform test ig"
+  }
+}
