@@ -1,11 +1,11 @@
 variable "min_size" {
   default = 1
-  type = number
+  type    = number
 }
 
 variable "max_size" {
   default = 10
-  type = number
+  type    = number
 }
 
 variable "ami" {
@@ -17,5 +17,9 @@ variable "instance_type" {
 }
 
 variable "user_data" {
+  type = string
+}
+
+variable "elb" {
   type = string
 }

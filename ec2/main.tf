@@ -1,8 +1,7 @@
 resource "aws_instance" "server" {
-  count           = var.instance_count
   ami             = "ami-080d1454ad4fabd12"
   instance_type   = "t2.micro"
-  subnet_id       = element(var.subnet, count.index)
+  subnet_id       = var.subnet
   security_groups = [var.ec2_security_group]
   user_data       = <<EOF
     #!/bin/bash
@@ -16,6 +15,6 @@ resource "aws_instance" "server" {
   EOF
 
   tags = {
-    Name = "server${count.index + 1}"
+    Name = "tf server"
   }
 }

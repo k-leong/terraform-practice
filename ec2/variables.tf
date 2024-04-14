@@ -1,9 +1,5 @@
 variable "subnet" {
-  type = list(string)
-}
-
-variable "instance_count" {
-  default = 5
+  type = string
 }
 
 variable "ec2_security_group" {
