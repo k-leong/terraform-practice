@@ -46,7 +46,7 @@ jobs:
         run: |
           export filename="terraform-state-${GITHUB_HEAD_REF##*/}-$(date +%Y%m%d%H%M%S)"
           echo "filename ${filename}"
-          echo "filename=${filename}.txt" >> $GITHUB_OUTPUT
+          echo "filename=${filename}.tfstate" >> $GITHUB_OUTPUT
 
       - name: Terraform Init
         id: init
