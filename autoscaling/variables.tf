@@ -8,18 +8,26 @@ variable "max_size" {
   type    = number
 }
 
-variable "ami" {
-  type = string
-}
-
-variable "instance_type" {
-  type = string
-}
-
-variable "user_data" {
-  type = string
-}
-
 variable "elb" {
+  type = string
+}
+
+variable "vpc_subnets" {
+  type = list(string)
+}
+
+variable "target_group" {
+  type = string
+}
+
+variable "instance" {
+  type = object({
+    ami = string
+    instance_type = string
+    user_data = string
+  })
+}
+
+variable "instance_sg" {
   type = string
 }
