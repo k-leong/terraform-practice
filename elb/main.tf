@@ -10,8 +10,8 @@ resource "aws_lb" "test" {
 }
 
 resource "aws_lb_target_group" "test_target_group" {
-  name        = "terraform-test-target-group"
-  port        = "80"
-  protocol    = "HTTP"
-  vpc_id      = var.vpc
+  name     = "terraform-test-target-group"
+  port     = "80"
+  protocol = "HTTP"
+  vpc_id   = var.vpc
 }

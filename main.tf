@@ -23,22 +23,13 @@ module "sg" {
   vpc_id = module.vpc.vpc_id
 }
 
-module "ec2" {
-  source = "./ec2"
-
-  subnet             = module.vpc.public_subnet_ids[0]
-  ec2_security_group = module.sg.ec2_rds_id
-
-  depends_on = [ module.vpc ]
-}
-
 module "rds" {
   source = "./rds"
 
   db_private_subnets = module.vpc.private_subnet_ids
   db_security_group  = module.sg.rds_ec2_id
 
-  depends_on = [ module.vpc ]
+  depends_on = [module.vpc]
 }
 
 module "elb" {
@@ -46,15 +37,14 @@ module "elb" {
 
   subnets = module.vpc.public_subnet_ids
   vpc     = module.vpc.vpc_id
-  asg = module.autoscaling.asg
+  asg     = module.autoscaling.asg
 }
 
 module "autoscaling" {
   source = "./autoscaling"
 
-  instance = module.ec2.ec2_instance
-  elb           = module.elb.elb
-  vpc_subnets =            module.vpc.public_subnet_ids
-  target_group  = module.elb.target_group.arn
-  instance_sg = module.sg.ec2_rds_id
+  elb          = module.elb.elb
+  vpc_subnets  = module.vpc.public_subnet_ids
+  target_group = module.elb.target_group.arn
+  instance_sg  = module.sg.ec2_rds_id
 }

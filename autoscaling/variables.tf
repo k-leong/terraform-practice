@@ -20,14 +20,6 @@ variable "target_group" {
   type = string
 }
 
-variable "instance" {
-  type = object({
-    ami = string
-    instance_type = string
-    user_data = string
-  })
-}
-
 variable "instance_sg" {
   type = string
 }
