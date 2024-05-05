@@ -13,9 +13,15 @@ resource "aws_autoscaling_group" "tf_autoscale" {
 }
 
 resource "aws_launch_template" "tf_launch_template" {
-  instance_type          = "t2.micro"
-  image_id               = "ami-080d1454ad4fabd12"
-  user_data              = "${base64encode(<<EOF
+  instance_type = "t2.micro"
+  image_id      = "ami-080d1454ad4fabd12"
+  key_name      = "terraform"
+  network_interfaces {
+    associate_public_ip_address = true
+    delete_on_termination       = true
+    security_groups = [ var.instance_sg ]
+  }
+  user_data = (base64encode(<<EOF
     #!/bin/bash
     # Use this for your user data (script from top to bottom)
     # install httpd (Linux 2 version)
@@ -25,9 +31,9 @@ resource "aws_launch_template" "tf_launch_template" {
     systemctl enable httpd
     echo "<h1>Hello World from $(hostname -f)</h1>" > /var/www/html/index.html
   EOF
-  )}"
-  
-  vpc_security_group_ids = [var.instance_sg]
+  ))
+
+  # vpc_security_group_ids = [var.instance_sg]
   tag_specifications {
     resource_type = "instance"
 

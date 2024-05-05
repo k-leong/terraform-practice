@@ -48,3 +48,11 @@ module "autoscaling" {
   target_group = module.elb.target_group.arn
   instance_sg  = module.sg.ec2_rds_id
 }
+
+module "rt" {
+  source = "./rt"
+
+  subnet_id = module.vpc.public_subnet_ids
+  vpc_id    = module.vpc.vpc_id
+  ig_id    = module.vpc.igw_id
+}

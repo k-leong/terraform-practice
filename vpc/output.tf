@@ -9,3 +9,7 @@ output "private_subnet_ids" {
 output "vpc_id" {
   value = aws_vpc.terraform_test.id
 }
+
+output "igw_id" {
+  value = aws_internet_gateway.terraform_ig.id
+}
