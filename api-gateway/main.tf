@@ -28,6 +28,13 @@ resource "aws_api_gateway_resource" "testResource" {
   path_part = "testresource"
 }
 
+resource "aws_api_gateway_method" "testMethod" {
+  rest_api_id = aws_api_gateway_rest_api.testAPI.id
+  resource_id = aws_api_gateway_resource.testResource.id
+  http_method = "GET"
+  authorization = "NONE"
+}
+
 resource "aws_api_gateway_deployment" "testDeployment" {
   rest_api_id = aws_api_gateway_rest_api.testAPI.id
 
