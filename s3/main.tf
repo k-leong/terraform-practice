@@ -22,3 +22,10 @@ resource "aws_s3_bucket_public_access_block" "bucket_public_access" {
   ignore_public_acls      = false
   restrict_public_buckets = false
 }
+
+resource "aws_s3_object" "test" {
+  bucket = aws_s3_bucket.my_first_bucket.id
+  key = "test"
+  source = "s3/index.html"
+  server_side_encryption = "AES256"
+}

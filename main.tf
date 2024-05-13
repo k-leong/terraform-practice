@@ -13,10 +13,14 @@ provider "aws" {
   region = "us-west-1"
 }
 
-module "vpc" {
-  source = "./vpc"
-}
+# module "vpc" {
+#   source = "./vpc"
+# }
 
 # module "s3" {
 #   source = "./s3"
 # }
+
+module "apigateway" {
+  source = "./api-gateway"
+}
